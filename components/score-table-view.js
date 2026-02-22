@@ -25,7 +25,16 @@ function HeaderCell({ children, isIndex }) {
 }
 
 // ── Data row ──────────────────────────────────────────────────────────────────
-function DataRow({ index, scores, isEven, rowBg, hoverBg, borderColor, indexColor, textColor }) {
+function DataRow({
+  index,
+  scores,
+  isEven,
+  rowBg,
+  hoverBg,
+  borderColor,
+  indexColor,
+  textColor
+}) {
   return (
     <Box
       display="grid"
@@ -38,11 +47,22 @@ function DataRow({ index, scores, isEven, rowBg, hoverBg, borderColor, indexColo
       transition="background 0.15s"
       _hover={{ bg: hoverBg }}
     >
-      <Text fontSize="sm" fontWeight="bold" color={indexColor} textAlign="center">
+      <Text
+        fontSize="sm"
+        fontWeight="bold"
+        color={indexColor}
+        textAlign="center"
+      >
         {index}
       </Text>
       {scores.map((score, i) => (
-        <Text key={i} fontSize="sm" fontWeight="medium" color={textColor} textAlign="center">
+        <Text
+          key={i}
+          fontSize="sm"
+          fontWeight="medium"
+          color={textColor}
+          textAlign="center"
+        >
           {score ?? '—'}
         </Text>
       ))}
@@ -64,26 +84,29 @@ export default function ScoreTableView() {
   }, [])
 
   // ── colors ──
-  const headerFrom    = useColorModeValue('#e53e3e', '#c53030')
-  const headerTo      = useColorModeValue('#9b2c2c', '#742a2a')
-  const tableBg       = useColorModeValue('white',              '#1e1e24')
-  const tableBorder   = useColorModeValue('red.100',            'whiteAlpha.100')
-  const rowEvenBg     = useColorModeValue('red.50',             'rgba(229,62,62,0.05)')
-  const rowHoverBg    = useColorModeValue('red.100',            'rgba(229,62,62,0.10)')
-  const rowDivider    = useColorModeValue('red.50',             'whiteAlpha.50')
-  const indexColor    = useColorModeValue('red.400',            'red.300')
-  const textColor     = useColorModeValue('gray.700',           'gray.200')
-  const emptyColor    = useColorModeValue('gray.400',           'gray.500')
+  const headerFrom = useColorModeValue('#e53e3e', '#c53030')
+  const headerTo = useColorModeValue('#9b2c2c', '#742a2a')
+  const tableBg = useColorModeValue('white', '#1e1e24')
+  const tableBorder = useColorModeValue('red.100', 'whiteAlpha.100')
+  const rowEvenBg = useColorModeValue('red.50', 'rgba(229,62,62,0.05)')
+  const rowHoverBg = useColorModeValue('red.100', 'rgba(229,62,62,0.10)')
+  const rowDivider = useColorModeValue('red.50', 'whiteAlpha.50')
+  const indexColor = useColorModeValue('red.400', 'red.300')
+  const textColor = useColorModeValue('gray.700', 'gray.200')
+  const emptyColor = useColorModeValue('gray.400', 'gray.500')
 
-  const addBorder     = useColorModeValue('red.200',            'red.800')
-  const addColor      = useColorModeValue('red.500',            'red.300')
-  const addHoverBg    = useColorModeValue('red.50',             'rgba(229,62,62,0.12)')
+  const addBorder = useColorModeValue('red.200', 'red.800')
+  const addColor = useColorModeValue('red.500', 'red.300')
+  const addHoverBg = useColorModeValue('red.50', 'rgba(229,62,62,0.12)')
   const finishGradient = useColorModeValue(
     'linear-gradient(135deg, #e53e3e 0%, #9b2c2c 100%)',
     'linear-gradient(135deg, #fc8181 0%, #e53e3e 100%)'
   )
-  const finishText    = useColorModeValue('white', '#1a202c')
-  const finishGlow    = useColorModeValue('rgba(197,48,48,0.40)', 'rgba(252,129,129,0.30)')
+  const finishText = useColorModeValue('white', '#1a202c')
+  const finishGlow = useColorModeValue(
+    'rgba(197,48,48,0.40)',
+    'rgba(252,129,129,0.30)'
+  )
 
   const handleAddRound = () => {
     // TODO: open input row or modal to enter scores
@@ -97,7 +120,6 @@ export default function ScoreTableView() {
 
   return (
     <Box display="flex" flexDirection="column" h="calc(100svh - 195px)">
-
       {/* ── Scrollable table ── */}
       <Box
         flex={1}
@@ -109,12 +131,12 @@ export default function ScoreTableView() {
         borderColor={tableBorder}
         boxShadow="0 2px 14px rgba(0,0,0,0.07)"
         css={{
-          '&::-webkit-scrollbar':       { width: '4px' },
+          '&::-webkit-scrollbar': { width: '4px' },
           '&::-webkit-scrollbar-track': { background: 'transparent' },
           '&::-webkit-scrollbar-thumb': {
             background: 'rgba(229,62,62,0.28)',
-            borderRadius: '4px',
-          },
+            borderRadius: '4px'
+          }
         }}
       >
         {/* Sticky header */}
@@ -128,7 +150,7 @@ export default function ScoreTableView() {
           py="12px"
           borderTopRadius="14px"
           style={{
-            background: `linear-gradient(135deg, ${headerFrom} 0%, ${headerTo} 100%)`,
+            background: `linear-gradient(135deg, ${headerFrom} 0%, ${headerTo} 100%)`
           }}
         >
           <HeaderCell isIndex>{t('roundNumber')}</HeaderCell>
@@ -139,7 +161,12 @@ export default function ScoreTableView() {
 
         {/* Rows */}
         {rows.length === 0 ? (
-          <Box display="flex" alignItems="center" justifyContent="center" h="160px">
+          <Box
+            display="flex"
+            alignItems="center"
+            justifyContent="center"
+            h="160px"
+          >
             <Text fontSize="sm" color={emptyColor}>
               {t('noRounds')}
             </Text>
@@ -163,7 +190,6 @@ export default function ScoreTableView() {
 
       {/* ── Bottom buttons ── */}
       <Box display="flex" gap={3} pt={3} pb={1}>
-
         {/* Add Round */}
         <MotionBox
           as="button"
@@ -206,14 +232,13 @@ export default function ScoreTableView() {
           whileHover={{
             scale: 1.02,
             boxShadow: `0 6px 28px ${finishGlow}`,
-            transition: { duration: 0.15 },
+            transition: { duration: 0.15 }
           }}
           whileTap={{ scale: 0.97, transition: { duration: 0.1 } }}
           onClick={handleFinish}
         >
           {t('finish')}
         </MotionBox>
-
       </Box>
     </Box>
   )

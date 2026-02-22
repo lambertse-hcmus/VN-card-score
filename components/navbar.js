@@ -45,7 +45,13 @@ const Navbar = props => {
           </Heading>
         </Flex>
 
-        <Box flex={1} display="flex" alignItems="center" justifyContent="flex-end" gap={2}>
+        <Box
+          flex={1}
+          display="flex"
+          alignItems="center"
+          justifyContent="flex-end"
+          gap={2}
+        >
           <LanguageToggleButton />
           <ThemeToggleButton />
         </Box>
@@ -55,4 +61,3 @@ const Navbar = props => {
 }
 
 export default Navbar
-

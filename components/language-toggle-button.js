@@ -19,7 +19,13 @@ const LanguageToggleButton = () => {
       >
         <IconButton
           aria-label={t('toggleLanguage')}
-          icon={language === 'vn' ? <VNIcon boxSize="20px" /> : <ENIcon boxSize="20px" />}
+          icon={
+            language === 'vn' ? (
+              <VNIcon boxSize="20px" />
+            ) : (
+              <ENIcon boxSize="20px" />
+            )
+          }
           onClick={toggleLanguage}
         />
       </motion.div>

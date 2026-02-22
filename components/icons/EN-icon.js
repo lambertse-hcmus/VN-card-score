@@ -1,4 +1,4 @@
-import { Box, useColorModeValue } from "@chakra-ui/react";
+import { Box, useColorModeValue } from '@chakra-ui/react'
 const ENIcon = ({ size = 10 }) => {
   return (
     <Box
@@ -6,7 +6,7 @@ const ENIcon = ({ size = 10 }) => {
       fontSize="sm"
       fontWeight="bold"
       color="white"
-      bg={useColorModeValue("blue.700", "blue.300")}
+      bg={useColorModeValue('blue.700', 'blue.300')}
       width={size}
       height={size}
       display="flex"
@@ -18,7 +18,7 @@ const ENIcon = ({ size = 10 }) => {
     >
       EN
     </Box>
-  );
-};
+  )
+}
 
-export default ENIcon;
+export default ENIcon

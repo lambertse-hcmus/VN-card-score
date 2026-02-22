@@ -12,8 +12,8 @@ const ScoreTable = () => {
   const [isModalOpen, setIsModalOpen] = useState(false)
   const { t } = useLanguage()
 
-  const btnBorder  = useColorModeValue('red.200', 'red.800')
-  const btnColor   = useColorModeValue('red.500', 'red.300')
+  const btnBorder = useColorModeValue('red.200', 'red.800')
+  const btnColor = useColorModeValue('red.500', 'red.300')
   const btnHoverBg = useColorModeValue('red.50', 'rgba(229,62,62,0.12)')
 
   return (

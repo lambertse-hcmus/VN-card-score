@@ -5,7 +5,7 @@ import StartButton from './start.js'
 const Page = () => {
   return (
     <Layout>
-      <Container maxW='2xl' minH="100vh">
+      <Container maxW="2xl" minH="100vh">
         <StartButton />
       </Container>
     </Layout>
@@ -13,4 +13,3 @@ const Page = () => {
 }
 
 export default Page
-

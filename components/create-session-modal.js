@@ -5,7 +5,7 @@ import {
   Text,
   IconButton,
   Portal,
-  useColorModeValue,
+  useColorModeValue
 } from '@chakra-ui/react'
 import { CloseIcon } from '@chakra-ui/icons'
 import { motion, AnimatePresence } from 'framer-motion'
@@ -15,23 +15,35 @@ const MotionBox = motion(Box)
 
 // ── Player input box ──────────────────────────────────────────────────────────
 
-function PlayerBox({ index, value, isEditing, onEdit, onDone, onChange, onKeyDown }) {
+function PlayerBox({
+  index,
+  value,
+  isEditing,
+  onEdit,
+  onDone,
+  onChange,
+  onKeyDown
+}) {
   const { t } = useLanguage()
 
-  const boxBg          = useColorModeValue('white', '#25252c')
-  const borderIdle     = useColorModeValue('#e8e8e8', 'rgba(255,255,255,0.10)')
-  const borderActive   = useColorModeValue('#e53e3e', '#fc8181')
-  const labelColor     = useColorModeValue('red.500', 'red.300')
-  const valueColor     = useColorModeValue('gray.800', 'gray.100')
+  const boxBg = useColorModeValue('white', '#25252c')
+  const borderIdle = useColorModeValue('#e8e8e8', 'rgba(255,255,255,0.10)')
+  const borderActive = useColorModeValue('#e53e3e', '#fc8181')
+  const labelColor = useColorModeValue('red.500', 'red.300')
+  const valueColor = useColorModeValue('gray.800', 'gray.100')
   const placeholderClr = useColorModeValue('#b0b0b0', '#555560')
-  const inputColor     = useColorModeValue('#1a1a1a', '#f0f0f0')
+  const inputColor = useColorModeValue('#1a1a1a', '#f0f0f0')
 
   return (
     // motion.div handles entrance; inner Box handles interactive CSS
     <motion.div
       initial={{ opacity: 0, y: 14 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.32, delay: 0.12 + index * 0.07, ease: 'easeOut' }}
+      transition={{
+        duration: 0.32,
+        delay: 0.12 + index * 0.07,
+        ease: 'easeOut'
+      }}
       style={{ display: 'flex', flex: 1 }}
     >
       <Box
@@ -82,7 +94,7 @@ function PlayerBox({ index, value, isEditing, onEdit, onDone, onChange, onKeyDow
               fontSize: '15px',
               fontWeight: '600',
               background: 'transparent',
-              color: inputColor,
+              color: inputColor
             }}
           />
         ) : (
@@ -103,45 +115,66 @@ function PlayerBox({ index, value, isEditing, onEdit, onDone, onChange, onKeyDow
 // ── Modal ─────────────────────────────────────────────────────────────────────
 
 export default function CreateSessionModal({ isOpen, onClose }) {
-  const [inputs, setInputs]             = useState(['', '', '', ''])
+  const [inputs, setInputs] = useState(['', '', '', ''])
   const [editingIndex, setEditingIndex] = useState(null)
 
   const { t } = useLanguage()
 
-  const modalBg      = useColorModeValue('#ffffff', '#1b1b22')
-  const headerColor  = useColorModeValue('gray.800', 'gray.50')
-  const subtitleClr  = useColorModeValue('gray.500', 'gray.400')
-  const dividerClr   = useColorModeValue('gray.100', 'whiteAlpha.100')
-  const glowColor    = useColorModeValue('rgba(197,48,48,0.50)', 'rgba(252,129,129,0.38)')
-  const btnGradient  = useColorModeValue(
+  const modalBg = useColorModeValue('#ffffff', '#1b1b22')
+  const headerColor = useColorModeValue('gray.800', 'gray.50')
+  const subtitleClr = useColorModeValue('gray.500', 'gray.400')
+  const dividerClr = useColorModeValue('gray.100', 'whiteAlpha.100')
+  const glowColor = useColorModeValue(
+    'rgba(197,48,48,0.50)',
+    'rgba(252,129,129,0.38)'
+  )
+  const btnGradient = useColorModeValue(
     'linear-gradient(135deg, #e53e3e 0%, #9b2c2c 100%)',
     'linear-gradient(135deg, #fc8181 0%, #e53e3e 100%)'
   )
   const btnTextColor = useColorModeValue('white', '#1a202c')
 
   const handleChange = (index, value) => {
-    setInputs(prev => { const n = [...prev]; n[index] = value; return n })
+    setInputs(prev => {
+      const n = [...prev]
+      n[index] = value
+      return n
+    })
   }
 
   const handleDone = () => setEditingIndex(null)
 
   const handleKeyDown = (e, index) => {
     if (e.key === 'Enter') handleDone()
-    if (e.key === 'Escape') {
-      setInputs(prev => { const n = [...prev]; n[index] = ''; return n })
+    else if (e.key === 'Escape') {
+      setInputs(prev => {
+        const n = [...prev]
+        n[index] = ''
+        return n
+      })
       setEditingIndex(null)
+    } else if (e.key === 'Tab') {
+      e.preventDefault()
+      const nextIndex = e.shiftKey
+        ? index === 0
+          ? inputs.length - 1
+          : index - 1
+        : index === inputs.length - 1
+          ? 0 
+          : index + 1
+      setEditingIndex(nextIndex)
     }
   }
 
   const handleStartGame = () => {
     const playerNames = inputs.map(name => name.trim() || null)
     console.log('Starting game with players:', playerNames)
-    if(!playerNames.every(name => name)) {
+    if (!playerNames.every(name => name)) {
       alert(t('enterPlayerNames'))
-      return 
-    } 
+      return
+    }
     localStorage.setItem('playerNames', JSON.stringify(playerNames))
-    window.location.href = '/' 
+    window.location.href = '/'
   }
 
   return (
@@ -155,7 +188,10 @@ export default function CreateSessionModal({ isOpen, onClose }) {
               inset={0}
               zIndex={1200}
               bg="blackAlpha.600"
-              css={{ backdropFilter: 'blur(7px)', WebkitBackdropFilter: 'blur(7px)' }}
+              css={{
+                backdropFilter: 'blur(7px)',
+                WebkitBackdropFilter: 'blur(7px)'
+              }}
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
@@ -175,8 +211,8 @@ export default function CreateSessionModal({ isOpen, onClose }) {
               boxShadow="0 28px 70px rgba(0,0,0,0.30)"
               p={{ base: 5, md: 7 }}
               initial={{ opacity: 0, scale: 0.88, x: '-50%', y: '-48%' }}
-              animate={{ opacity: 1, scale: 1,    x: '-50%', y: '-50%' }}
-              exit={{    opacity: 0, scale: 0.88, x: '-50%', y: '-48%' }}
+              animate={{ opacity: 1, scale: 1, x: '-50%', y: '-50%' }}
+              exit={{ opacity: 0, scale: 0.88, x: '-50%', y: '-48%' }}
               transition={{ duration: 0.26, ease: [0.32, 0.72, 0, 1] }}
             >
               {/* Header */}
@@ -256,7 +292,7 @@ export default function CreateSessionModal({ isOpen, onClose }) {
                 whileHover={{
                   scale: 1.03,
                   boxShadow: `0 8px 36px ${glowColor}`,
-                  transition: { duration: 0.18 },
+                  transition: { duration: 0.18 }
                 }}
                 whileTap={{ scale: 0.97, transition: { duration: 0.1 } }}
                 onClick={handleStartGame}

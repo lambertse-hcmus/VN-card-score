@@ -1,7 +1,7 @@
-import Link from "next/link";
-import { Text, useColorModeValue } from "@chakra-ui/react";
-import styled from "@emotion/styled";
-import { useLanguage } from "../lib/i18n";
+import Link from 'next/link'
+import { Text, useColorModeValue } from '@chakra-ui/react'
+import styled from '@emotion/styled'
+import { useLanguage } from '../lib/i18n'
 
 const LogoBox = styled.span`
   font-weight: bold;
@@ -19,24 +19,24 @@ const LogoBox = styled.span`
   &:hover > svg {
     transform: rotate(20deg);
   }
-`;
+`
 
 const Logo = () => {
-  const { t } = useLanguage();
+  const { t } = useLanguage()
   return (
     <Link href="/" scroll={false}>
       <LogoBox>
         <Text
-          color={useColorModeValue("gray.800", "whiteAlpha.900")}
+          color={useColorModeValue('gray.800', 'whiteAlpha.900')}
           fontFamily="M PLUS Rounded 1c, sans-serif"
           fontWeight="bold"
           ml={3}
         >
-          ♣ {t("logo")}
+          ♣ {t('logo')}
         </Text>
       </LogoBox>
     </Link>
-  );
-};
+  )
+}
 
-export default Logo;
+export default Logo

@@ -1,4 +1,4 @@
-import { Box, useColorModeValue } from "@chakra-ui/react";
+import { Box, useColorModeValue } from '@chakra-ui/react'
 const VNIcon = ({ size = 10 }) => {
   return (
     <Box
@@ -6,7 +6,7 @@ const VNIcon = ({ size = 10 }) => {
       fontSize="sm"
       fontWeight="bold"
       color="white"
-      bg={useColorModeValue("red.700", "red.300")}
+      bg={useColorModeValue('red.700', 'red.300')}
       width={size}
       height={size}
       display="flex"
@@ -18,7 +18,7 @@ const VNIcon = ({ size = 10 }) => {
     >
       VN
     </Box>
-  );
-};
+  )
+}
 
-export default VNIcon;
+export default VNIcon
