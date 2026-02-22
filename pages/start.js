@@ -88,7 +88,7 @@ export default function StartPage() {
         minH="80vh"
         px={4}
       >
-        <Box w="full" height="90vh">
+        <Box w="full" height="80vh">
           {players.length > 0 ? (
             <ScoreTable />
           ) : (
