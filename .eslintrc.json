@@ -1,0 +1,14 @@
+{
+  "root": true,
+  "extends": "next",
+  "rules": {
+    "no-unused-vars": [
+      //This rule is set to "error" level, meaning that any unused variables will be treated as errors. However, variables and arguments that start with an underscore (_) are ignored by this rule. This is useful for indicating that certain variables or parameters are intentionally unused.
+      "error",
+      {
+        "varsIgnorePattern": "^_",
+        "argsIgnorePattern": "^_"
+      }
+    ]
+  }
+}

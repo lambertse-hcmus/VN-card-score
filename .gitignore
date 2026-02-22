@@ -1,0 +1,7 @@
+# .gitignore for NextJS project
+node_modules/
+.next/
+out/
+dist/
+build/
+
