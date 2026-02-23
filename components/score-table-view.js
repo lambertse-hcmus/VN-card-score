@@ -399,16 +399,36 @@ export default function ScoreTableView() {
 
   return (
     <Box display="flex" flexDirection="column" h="calc(100svh - 195px)">
-      {/* ── Scrollable table ── */}
+      {/* ── Fixed header (always visible) ── */}
+      <Box
+        display="grid"
+        gridTemplateColumns="40px 1fr 1fr 1fr 1fr"
+        px={3}
+        py="12px"
+        borderRadius="16px 16px 0 0"
+        style={{
+          background: `linear-gradient(135deg, ${headerFrom} 0%, ${headerTo} 100%)`
+        }}
+        border="1.5px solid"
+        borderBottom="2px solid"
+        borderColor={tableBorder}
+        borderBottomColor="rgba(255,255,255,0.15)"
+        boxShadow="0 2px 14px rgba(0,0,0,0.07)"
+      >
+        <HeaderCell isIndex>{t('roundNumber')}</HeaderCell>
+        {playerNames.map((name, i) => (
+          <HeaderCell key={i}>{name || `P${i + 1}`}</HeaderCell>
+        ))}
+      </Box>
+      {/* ── Scrollable table body ── */}
       <Box
         flex={1}
         minH={0}
         overflowY="auto"
         bg={tableBg}
-        borderRadius="16px"
-        border="1.5px solid"
+        borderLeft="1.5px solid"
+        borderRight="1.5px solid"
         borderColor={tableBorder}
-        boxShadow="0 2px 14px rgba(0,0,0,0.07)"
         css={{
           '&::-webkit-scrollbar': { width: '4px' },
           '&::-webkit-scrollbar-track': { background: 'transparent' },
@@ -418,26 +438,6 @@ export default function ScoreTableView() {
           }
         }}
       >
-        {/* Sticky header */}
-        <Box
-          position="sticky"
-          top={0}
-          zIndex={1}
-          display="grid"
-          gridTemplateColumns="40px 1fr 1fr 1fr 1fr"
-          px={3}
-          py="12px"
-          borderTopRadius="14px"
-          style={{
-            background: `linear-gradient(135deg, ${headerFrom} 0%, ${headerTo} 100%)`
-          }}
-        >
-          <HeaderCell isIndex>{t('roundNumber')}</HeaderCell>
-          {playerNames.map((name, i) => (
-            <HeaderCell key={i}>{name || `P${i + 1}`}</HeaderCell>
-          ))}
-        </Box>
-
         {/* Rows */}
         {rows.length === 0 ? (
           <Box
@@ -465,7 +465,45 @@ export default function ScoreTableView() {
           </AnimatePresence>
         )}
       </Box>
-
+      {/* ── Fixed total bar (always visible) ── */}
+      <Box
+        display="grid"
+        gridTemplateColumns="40px 1fr 1fr 1fr 1fr"
+        px={3}
+        py="10px"
+        borderRadius="0 0 16px 16px"
+        style={{
+          background: `linear-gradient(135deg, ${headerFrom} 0%, ${headerTo} 100%)`
+        }}
+        border="1.5px solid"
+        borderTop="2px solid"
+        borderColor={tableBorder}
+        borderTopColor="rgba(255,255,255,0.15)"
+        boxShadow="0 -2px 14px rgba(0,0,0,0.07)"
+      >
+        <Text
+          fontSize="10px"
+          fontWeight="bold"
+          letterSpacing="0.09em"
+          textTransform="uppercase"
+          textAlign="center"
+          color="whiteAlpha.800"
+        ></Text>
+        {playerNames.map((_, i) => {
+          const total = rows.reduce((sum, row) => sum + (row[i] ?? 0), 0)
+          return (
+            <Text
+              key={i}
+              fontSize="sm"
+              fontWeight="bold"
+              textAlign="center"
+              color={total > 0 ? 'green.200' : total < 0 ? 'red.200' : 'white'}
+            >
+              {total}
+            </Text>
+          )
+        })}
+      </Box>{' '}
       {/* ── Bottom buttons ── */}
       <Box display="flex" gap={3} pt={3} pb={1}>
         {/* Add Round */}
@@ -518,7 +556,6 @@ export default function ScoreTableView() {
           {t('finish')}
         </MotionBox>
       </Box>
-
       {/* ── Shared add/edit modal ── */}
       <CreateGameResultModal
         isOpen={modal.open}
