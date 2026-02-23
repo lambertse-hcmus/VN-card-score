@@ -9,6 +9,7 @@ import {
 import { TbEdit, TbTrash } from 'react-icons/tb'
 import { useLanguage } from '../lib/i18n'
 import CreateGameResultModal from './create-game-result-modal'
+import FinishConfirmationModal from './finish-confirmation'
 
 const MotionBox = motion(Box)
 
@@ -346,6 +347,7 @@ export default function ScoreTableView() {
   const { t } = useLanguage()
   const [playerNames, setPlayerNames] = useState(['', '', '', ''])
   const [rows, setRows] = useState([])
+  const [isFinishModalOpen, setIsFinishModalOpen] = useState(false)
 
   // modal: { open, mode: 'add'|'edit', rowIndex }
   const [modal, setModal] = useState({
@@ -577,7 +579,7 @@ export default function ScoreTableView() {
             transition: { duration: 0.15 }
           }}
           whileTap={{ scale: 0.97, transition: { duration: 0.1 } }}
-          onClick={handleFinish}
+          onClick={() => setIsFinishModalOpen(true)}
         >
           {t('finish')}
         </MotionBox>
@@ -590,6 +592,11 @@ export default function ScoreTableView() {
         playerNames={playerNames}
         initialValues={modal.mode === 'edit' ? rows[modal.rowIndex] : null}
         roundIndex={modal.mode === 'edit' ? modal.rowIndex + 1 : null}
+      />
+      {/* -- Finish confirmation components -- */}
+      <FinishConfirmationModal
+        isOpen={isFinishModalOpen}
+        onClose={() => setIsFinishModalOpen(false)}
       />
     </Box>
   )
