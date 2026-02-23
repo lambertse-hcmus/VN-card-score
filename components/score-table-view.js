@@ -1,7 +1,12 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { Box, Text, useColorModeValue } from '@chakra-ui/react'
-import { motion } from 'framer-motion'
-import { TbEdit } from 'react-icons/tb'
+import {
+  motion,
+  AnimatePresence,
+  useMotionValue,
+  useTransform
+} from 'framer-motion'
+import { TbEdit, TbTrash } from 'react-icons/tb'
 import { useLanguage } from '../lib/i18n'
 import CreateGameResultModal from './create-game-result-modal'
 
@@ -26,67 +31,303 @@ function HeaderCell({ children, isIndex }) {
   )
 }
 
-// ── Data row (self-contained; edit icon revealed on hover) ────────────────────
-function DataRow({ index, scores, isEven, onEdit }) {
+// ── Swipeable Data Row ────────────────────────────────────────────────────────
+function DataRow({ index, scores, isEven, onEdit, onDelete }) {
+  const { t } = useLanguage()
+
   const rowEvenBg = useColorModeValue('red.50', 'rgba(229,62,62,0.05)')
   const rowHoverBg = useColorModeValue('red.100', 'rgba(229,62,62,0.10)')
   const rowDivider = useColorModeValue('red.50', 'whiteAlpha.50')
   const indexColor = useColorModeValue('red.400', 'red.300')
   const textColor = useColorModeValue('gray.700', 'gray.200')
   const iconColor = useColorModeValue('red.300', 'red.600')
+  const deleteBg = useColorModeValue(
+    'rgba(229,62,62,0.12)',
+    'rgba(229,62,62,0.15)'
+  )
+  const deleteTextClr = useColorModeValue('red.500', 'red.300')
+  const confirmBg = useColorModeValue(
+    'rgba(229,62,62,0.15)',
+    'rgba(229,62,62,0.18)'
+  )
+  const confirmBtnBg = useColorModeValue('red.500', 'red.400')
+  const confirmBtnBorder = useColorModeValue('red.400', 'red.300')
+
+  const rowBg = useColorModeValue(
+    isEven ? '#fff5f5' : 'white',
+    isEven ? 'rgba(229,62,62,0.05)' : '#1e1e24'
+  )
+
+  const [showConfirm, setShowConfirm] = useState(false)
+  const [isDeleting, setIsDeleting] = useState(false)
+  const [isDragging, setIsDragging] = useState(false)
+  const [isShaking, setIsShaking] = useState(false)
+  const constraintsRef = useRef(null)
+
+  const x = useMotionValue(0)
+  const deleteOpacity = useTransform(x, [-140, -70, 0], [1, 0.8, 0])
+  const deleteScale = useTransform(x, [-140, -70, 0], [1, 0.85, 0.6])
+
+  const SWIPE_THRESHOLD = -80
+
+  const handleDragStart = () => {
+    setIsDragging(true)
+  }
+
+  const handleDragEnd = (_, info) => {
+    if (info.offset.x < SWIPE_THRESHOLD) {
+      // Trigger shake + blur, then show confirm
+      setIsShaking(true)
+      setTimeout(() => {
+        setIsShaking(false)
+        setShowConfirm(true)
+      }, 420)
+    }
+    // Delay resetting so onClick doesn't fire
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        setIsDragging(false)
+      })
+    })
+  }
+
+  const handleCancel = () => {
+    setShowConfirm(false)
+  }
+
+  const handleConfirmDelete = () => {
+    setIsDeleting(true)
+  }
+
+  const handleDeleteAnimationComplete = () => {
+    if (isDeleting) {
+      onDelete()
+    }
+  }
+
+  const handleRowClick = () => {
+    if (isDragging || showConfirm || isShaking) return
+    onEdit()
+  }
 
   return (
-    <Box
-      role="group"
-      position="relative"
-      display="grid"
-      gridTemplateColumns="40px 1fr 1fr 1fr 1fr"
-      px={3}
-      py="11px"
-      bg={isEven ? rowEvenBg : 'transparent'}
-      borderBottom="1px solid"
-      borderColor={rowDivider}
-      cursor="pointer"
-      transition="background 0.15s"
-      _hover={{ bg: rowHoverBg }}
-      onClick={onEdit}
+    <AnimatePresence
+      mode="popLayout"
+      onExitComplete={handleDeleteAnimationComplete}
     >
-      <Text
-        fontSize="sm"
-        fontWeight="bold"
-        color={indexColor}
-        textAlign="center"
-      >
-        {index}
-      </Text>
-      {scores.map((score, i) => (
-        <Text
-          key={i}
-          fontSize="sm"
-          fontWeight="medium"
-          color={textColor}
-          textAlign="center"
+      {!isDeleting && (
+        <MotionBox
+          layout
+          initial={{ opacity: 1, height: 'auto' }}
+          exit={{
+            opacity: 0,
+            height: 0,
+            marginTop: 0,
+            marginBottom: 0,
+            paddingTop: 0,
+            paddingBottom: 0,
+            transition: {
+              opacity: { duration: 0.2 },
+              height: { duration: 0.3, delay: 0.05, ease: [0.32, 0.72, 0, 1] }
+            }
+          }}
+          position="relative"
+          overflow="hidden"
+          ref={constraintsRef}
         >
-          {score ?? '—'}
-        </Text>
-      ))}
+          {/* ── Delete action layer (sits behind the row) ── */}
+          <Box
+            position="absolute"
+            top={0}
+            right={0}
+            bottom={0}
+            w="100%"
+            bg={deleteBg}
+            css={{
+              backdropFilter: 'blur(4px)',
+              WebkitBackdropFilter: 'blur(4px)'
+            }}
+            display="flex"
+            alignItems="center"
+            justifyContent="flex-end"
+            pr={5}
+            zIndex={0}
+          >
+            <MotionBox
+              style={{ opacity: deleteOpacity, scale: deleteScale }}
+              display="flex"
+              alignItems="center"
+              gap={2}
+            >
+              <TbTrash size={16} color="var(--chakra-colors-red-400)" />
+              <Text
+                fontSize="xs"
+                fontWeight="bold"
+                color={deleteTextClr}
+                letterSpacing="0.06em"
+              >
+                {t('delete') || 'DELETE'}
+              </Text>
+            </MotionBox>
+          </Box>{' '}
+          {/* ── Shake + blur keyframes ── */}
+          <style>{`
+            @keyframes rowShake {
+              0%, 100% { transform: translateX(0); filter: blur(0px); }
+              10% { transform: translateX(-6px); filter: blur(1.5px); }
+              20% { transform: translateX(5px); filter: blur(2px); }
+              30% { transform: translateX(-4px); filter: blur(2.5px); }
+              40% { transform: translateX(4px); filter: blur(2px); }
+              50% { transform: translateX(-3px); filter: blur(1.5px); }
+              60% { transform: translateX(2px); filter: blur(1px); }
+              70% { transform: translateX(-1px); filter: blur(0.5px); }
+              80%, 100% { transform: translateX(0); filter: blur(0px); }
+            }
+          `}</style>
+          {/* ── Confirm delete overlay ── */}
+          <AnimatePresence>
+            {showConfirm && (
+              <MotionBox
+                position="absolute"
+                top={0}
+                left={0}
+                right={0}
+                bottom={0}
+                zIndex={3}
+                display="flex"
+                alignItems="center"
+                justifyContent="center"
+                gap={3}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.18 }}
+                bg={confirmBg}
+                css={{
+                  backdropFilter: 'blur(6px)',
+                  WebkitBackdropFilter: 'blur(6px)'
+                }}
+                px={4}
+              >
+                <Text fontSize="xs" fontWeight="bold" color="red.500" mr={2}>
+                  {t('confirmDelete') || 'Delete this round?'}
+                </Text>
 
-      {/* Edit hint — faint by default, clear on hover */}
-      <Box
-        position="absolute"
-        right={2}
-        top="50%"
-        style={{ transform: 'translateY(-50%)' }}
-        opacity={0.2}
-        _groupHover={{ opacity: 0.75 }}
-        transition="opacity 0.15s"
-        pointerEvents="none"
-        aria-hidden="true"
-        color={iconColor}
-      >
-        <TbEdit size={14} />
-      </Box>
-    </Box>
+                {/* Confirm button */}
+                <MotionBox
+                  as="button"
+                  px={4}
+                  py={1.5}
+                  fontSize="xs"
+                  fontWeight="bold"
+                  fontFamily="'M PLUS Rounded 1c', sans-serif"
+                  color="white"
+                  bg={confirmBtnBg}
+                  border="none"
+                  borderRadius="full"
+                  cursor="pointer"
+                  whileHover={{ scale: 1.06 }}
+                  whileTap={{ scale: 0.94 }}
+                  onClick={handleConfirmDelete}
+                >
+                  {t('yes') || 'Yes'}
+                </MotionBox>
+
+                {/* Cancel button */}
+                <MotionBox
+                  as="button"
+                  px={4}
+                  py={1.5}
+                  fontSize="xs"
+                  fontWeight="bold"
+                  fontFamily="'M PLUS Rounded 1c', sans-serif"
+                  color="red.500"
+                  bg="transparent"
+                  border="1.5px solid"
+                  borderColor={confirmBtnBorder}
+                  borderRadius="full"
+                  cursor="pointer"
+                  whileHover={{ scale: 1.06 }}
+                  whileTap={{ scale: 0.94 }}
+                  onClick={handleCancel}
+                >
+                  {t('no') || 'No'}
+                </MotionBox>
+              </MotionBox>
+            )}
+          </AnimatePresence>
+          {/* ── Draggable row content ── */}
+          <MotionBox
+            role="group"
+            position="relative"
+            zIndex={1}
+            display="grid"
+            gridTemplateColumns="40px 1fr 1fr 1fr 1fr"
+            px={3}
+            py="11px"
+            bg={rowBg}
+            borderBottom="1px solid"
+            borderColor={rowDivider}
+            cursor="grab"
+            transition="background 0.15s"
+            _hover={{ bg: showConfirm ? rowBg : rowHoverBg }}
+            style={{ x, touchAction: 'pan-y' }}
+            drag={showConfirm || isShaking ? false : 'x'}
+            dragConstraints={{ left: -160, right: 0 }}
+            dragElastic={{ left: 0.15, right: 0 }}
+            dragSnapToOrigin
+            onDragStart={handleDragStart}
+            onDragEnd={handleDragEnd}
+            onClick={handleRowClick}
+            whileActive={{ cursor: 'grabbing' }}
+            css={
+              isShaking
+                ? {
+                    animation: 'rowShake 0.4s ease-in-out',
+                    filter: 'blur(0px)'
+                  }
+                : undefined
+            }
+          >
+            <Text
+              fontSize="sm"
+              fontWeight="bold"
+              color={indexColor}
+              textAlign="center"
+            >
+              {index}
+            </Text>
+            {scores.map((score, i) => (
+              <Text
+                key={i}
+                fontSize="sm"
+                fontWeight="medium"
+                color={textColor}
+                textAlign="center"
+              >
+                {score ?? '—'}
+              </Text>
+            ))}
+
+            {/* Edit hint */}
+            <Box
+              position="absolute"
+              right={2}
+              top="50%"
+              style={{ transform: 'translateY(-50%)' }}
+              opacity={0.2}
+              _groupHover={{ opacity: 0.75 }}
+              transition="opacity 0.15s"
+              pointerEvents="none"
+              aria-hidden="true"
+              color={iconColor}
+            >
+              <TbEdit size={14} />
+            </Box>
+          </MotionBox>
+        </MotionBox>
+      )}
+    </AnimatePresence>
   )
 }
 
@@ -145,6 +386,10 @@ export default function ScoreTableView() {
         return next
       })
     }
+  }
+
+  const handleDelete = i => {
+    setRows(prev => prev.filter((_, idx) => idx !== i))
   }
 
   const handleFinish = () => {
@@ -206,15 +451,18 @@ export default function ScoreTableView() {
             </Text>
           </Box>
         ) : (
-          rows.map((row, i) => (
-            <DataRow
-              key={i}
-              index={i + 1}
-              scores={row}
-              isEven={i % 2 === 1}
-              onEdit={() => openEdit(i)}
-            />
-          ))
+          <AnimatePresence initial={false}>
+            {rows.map((row, i) => (
+              <DataRow
+                key={`row-${i}-${row.join(',')}`}
+                index={i + 1}
+                scores={row}
+                isEven={i % 2 === 1}
+                onEdit={() => openEdit(i)}
+                onDelete={() => handleDelete(i)}
+              />
+            ))}
+          </AnimatePresence>
         )}
       </Box>
 
