@@ -41,6 +41,7 @@ export default function ResetSessionModal({ isOpen, onClose }) {
 
   const handleConfirm = () => {
     localStorage.removeItem('playerNames')
+    localStorage.removeItem('gameRows')
     window.location.reload()
   }
 

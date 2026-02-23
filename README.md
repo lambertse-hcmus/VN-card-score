@@ -1,2 +1,2 @@
-## Vietnamese card board game score calculator - dev by @lambertse
+## Card board game score calculator - dev by @lambertse
 

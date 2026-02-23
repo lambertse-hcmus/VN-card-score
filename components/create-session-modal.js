@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import {
   Box,
   Grid,
@@ -133,6 +133,18 @@ export default function CreateSessionModal({ isOpen, onClose }) {
   const [editingIndex, setEditingIndex] = useState(null)
   const [errors, setErrors] = useState(new Set())
   const [errorMessage, setErrorMessage] = useState('')
+  // Enter key triggers confirm
+  useEffect(() => {
+    if (!isOpen) return
+    const handler = e => {
+      if (e.key === 'Enter') {
+        e.preventDefault()
+        handleDone()
+      }
+    }
+    window.addEventListener('keydown', handler)
+    return () => window.removeEventListener('keydown', handler)
+  })
 
   const { t } = useLanguage()
 
@@ -170,8 +182,7 @@ export default function CreateSessionModal({ isOpen, onClose }) {
   const handleDone = () => setEditingIndex(null)
 
   const handleKeyDown = (e, index) => {
-    if (e.key === 'Enter') handleDone()
-    else if (e.key === 'Escape') {
+    if (e.key === 'Escape') {
       setInputs(prev => {
         const n = [...prev]
         n[index] = ''
@@ -185,7 +196,7 @@ export default function CreateSessionModal({ isOpen, onClose }) {
           ? inputs.length - 1
           : index - 1
         : index === inputs.length - 1
-          ? 0 
+          ? 0
           : index + 1
       setEditingIndex(nextIndex)
     }
