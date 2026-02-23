@@ -24,7 +24,7 @@ export default function StartPage() {
   const { t } = useLanguage()
   const shouldReduceMotion = useReducedMotion()
   const [players, setPlayers] = useState([])
-  const [totalScore, setTotalScore] = useState(null)
+  const [totalScores, setTotalScores] = useState()
 
   // Collect players from localStorage
   React.useEffect(() => {
@@ -41,7 +41,7 @@ export default function StartPage() {
 
   const handleFinishClicked = finalScores => {
     console.log('Final scores received in StartPage:', finalScores)
-    setTotalScore(finalScores)
+    setTotalScores(finalScores)
   }
 
   return (
@@ -96,8 +96,8 @@ export default function StartPage() {
         px={4}
       >
         <Box w="full" height="80vh">
-          {totalScore ? (
-            <RatingScreen scores={totalScore} />
+          {totalScores ? (
+            <RatingScreen totalScores={totalScores} />
           ) : players.length > 0 ? (
             <ScoreTable onFinishClick={handleFinishClicked} />
           ) : (

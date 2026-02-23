@@ -174,7 +174,7 @@ const ScoreTable = ({ onFinishClick }) => {
       <ResetSessionModal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
-      />                     ()
+      />                     
       {/* ── Shared add/edit modal ── */}
       <CreateGameResultModal
         isOpen={modal.open}
