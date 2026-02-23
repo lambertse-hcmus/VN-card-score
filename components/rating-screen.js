@@ -130,28 +130,28 @@ function SparkleStar({ top, left, delay, size }) {
 const RANK_CONFIG = {
   1: {
     emoji: '🏆',
-    size: '72px',
+    size: '50px',
     label: '1st',
     color: '#ffd700',
     glow: 'rgba(255,215,0,0.5)'
   },
   2: {
     emoji: '🥈',
-    size: '60px',
+    size: '40px',
     label: '2nd',
     color: '#c0c0c0',
     glow: 'rgba(192,192,192,0.4)'
   },
   3: {
     emoji: '🥉',
-    size: '52px',
+    size: '30px',
     label: '3rd',
     color: '#cd7f32',
     glow: 'rgba(205,127,50,0.4)'
   },
   4: {
     emoji: '💪',
-    size: '46px',
+    size: '20px',
     label: '4th',
     color: '#e53e3e',
     glow: 'rgba(229,62,62,0.3)'

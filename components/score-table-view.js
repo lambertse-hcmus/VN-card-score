@@ -357,7 +357,7 @@ export default function ScoreTableView({ playerNames, rows }) {
   }
 
   return (
-    <Box display="flex" flexDirection="column" h="calc(100svh - 250px)" mb={15}>
+    <Box display="flex" flexDirection="column" h="calc(100svh - 200px)" mb={15}>
       {/* ── Fixed header (always visible) ── */}
       <Box
         display="grid"

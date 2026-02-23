@@ -287,7 +287,7 @@ function EngineerInfoModal({ isOpen, onClose }) {
                           }}
                         >
                           <Image
-                            src="/images/momo.jpeg"
+                            src="/images/momo_qr.jpeg"
                             alt="MoMo QR Code - Buy me a coffee"
                             width={280}
                             height={280}
