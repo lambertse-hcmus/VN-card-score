@@ -82,9 +82,9 @@ const ScoreTable = ({ onFinishClick }) => {
   }, [])
 
   return (
-    <Box mt={5}>
+    <Box>
       {/* Reset button — right aligned */}
-      <Box display="flex" justifyContent="flex-end" mb={3}>
+      <Box display="flex" justifyContent="flex-end" my={2}>
         <MotionBox
           as="button"
           display="inline-flex"

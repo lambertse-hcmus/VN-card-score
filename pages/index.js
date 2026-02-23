@@ -1,12 +1,12 @@
 import { Container, Box, IconButton } from '@chakra-ui/react'
 import Layout from '../components/layouts/article.js'
-import StartButton from './start.js'
+import StartPage from './start.js'
 
 const Page = () => {
   return (
     <Layout>
-      <Container maxW="2xl" minH="100vh">
-        <StartButton />
+      <Container maxW="container.md" minH="100vh">
+        <StartPage />
       </Container>
     </Layout>
   )

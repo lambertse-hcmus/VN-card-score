@@ -86,7 +86,8 @@ function ScoreBox({ index, playerName, value, isEditing, hasError, onEdit, onDon
           <input
             autoFocus
             value={value}
-            inputMode="numeric"
+            inputMode="text"
+            pattern="-?[0-9]*"
             onChange={e => onChange(e.target.value)}
             onBlur={onDone}
             onKeyDown={onKeyDown}

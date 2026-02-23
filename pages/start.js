@@ -1,8 +1,7 @@
 import React, { useState } from 'react'
-import { Box, Text, useColorModeValue } from '@chakra-ui/react'
+import { Box, Text, useColorModeValue, Container } from '@chakra-ui/react'
 import { motion, useReducedMotion } from 'framer-motion'
 import { useLanguage } from '../lib/i18n'
-import Layout from '../components/layouts/article'
 import Dashboard from '../components/dashboard'
 import ScoreTable from '../components/score-table'
 import RatingScreen from '../components/rating-screen'
@@ -45,7 +44,7 @@ export default function StartPage() {
   }
 
   return (
-    <Layout>
+    <Box>
       {/* Decorative floating card suits */}
       <Box
         position="fixed"
@@ -93,7 +92,6 @@ export default function StartPage() {
         alignItems="center"
         justifyContent="center"
         minH="80vh"
-        px={4}
       >
         <Box w="full" height="80vh">
           {totalScores ? (
@@ -105,6 +103,6 @@ export default function StartPage() {
           )}
         </Box>
       </Box>
-    </Layout>
+    </Box>
   )
 }
