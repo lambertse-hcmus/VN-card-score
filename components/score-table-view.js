@@ -24,7 +24,7 @@ function HeaderCell({ children, isIndex }) {
       color="white"
       px={1}
       isTruncated
-      w={isIndex ? '40px' : undefined}
+      w={isIndex ? '41px' : undefined}
     >
       {children}
     </Text>
@@ -35,9 +35,12 @@ function HeaderCell({ children, isIndex }) {
 function DataRow({ index, scores, isEven, onEdit, onDelete }) {
   const { t } = useLanguage()
 
-  const rowEvenBg = useColorModeValue('red.50', 'rgba(229,62,62,0.05)')
   const rowHoverBg = useColorModeValue('red.100', 'rgba(229,62,62,0.10)')
   const rowDivider = useColorModeValue('red.50', 'whiteAlpha.50')
+  const indexDivider = useColorModeValue(
+    'rgba(155,44,44,0.25)',
+    'rgba(155,44,44,0.4)'
+  )
   const indexColor = useColorModeValue('red.400', 'red.300')
   const textColor = useColorModeValue('gray.700', 'gray.200')
   const iconColor = useColorModeValue('red.300', 'red.600')
@@ -294,6 +297,13 @@ function DataRow({ index, scores, isEven, onEdit, onDelete }) {
               fontWeight="bold"
               color={indexColor}
               textAlign="center"
+              display="flex"
+              alignItems="center"
+              justifyContent="center"
+              alignSelf="stretch"
+              my="-12px"
+              borderRight="1.5px solid"
+              borderColor={indexDivider}
             >
               {index}
             </Text>
@@ -489,13 +499,22 @@ export default function ScoreTableView() {
         boxShadow="0 -2px 14px rgba(0,0,0,0.07)"
       >
         <Text
-          fontSize="10px"
+          key={'total-games'}
+          fontSize="sm"
           fontWeight="bold"
-          letterSpacing="0.09em"
-          textTransform="uppercase"
           textAlign="center"
-          color="whiteAlpha.800"
-        ></Text>
+          color={useColorModeValue('whiteAlpha.900', 'white')}
+          display="flex"
+          alignItems="center"
+          justifyContent="center"
+          alignSelf="stretch"
+          my="-10px"
+          borderRight="1.5px solid"
+          borderColor="rgba(155,44,44,0.6)"
+        >
+          {/* The number of games */}
+          {rows.length}
+        </Text>
         {playerNames.map((_, i) => {
           const total = rows.reduce((sum, row) => sum + (row[i] ?? 0), 0)
           return (

@@ -17,6 +17,7 @@ import {
 } from '@chakra-ui/react'
 import ThemeToggleButton from './theme-toggle-button'
 import LanguageToggleButton from './language-toggle-button'
+import EngineerInfo from './engineer-info'
 
 const Navbar = props => {
   const { path } = props
@@ -52,8 +53,9 @@ const Navbar = props => {
           justifyContent="flex-end"
           gap={2}
         >
-          <LanguageToggleButton />
           <ThemeToggleButton />
+          <LanguageToggleButton />
+          <EngineerInfo />
         </Box>
       </Container>
     </Box>
