@@ -8,6 +8,7 @@ import {
 } from 'framer-motion'
 import { TbEdit, TbTrash } from 'react-icons/tb'
 import { useLanguage } from '../lib/i18n'
+import CreateGameResultModal from './create-game-result-modal'
 const MotionBox = motion(Box)
 
 // ── Header cell ───────────────────────────────────────────────────────────────
@@ -340,7 +341,7 @@ function DataRow({ index, scores, isEven, onEdit, onDelete }) {
 }
 
 // ── ScoreTableView ────────────────────────────────────────────────────────────
-export default function ScoreTableView({ playerNames, rows }) {
+export default function ScoreTableView({ playerNames, rows, updateRows }) {
   const { t } = useLanguage()
 
   // ── colors ──
@@ -352,7 +353,25 @@ export default function ScoreTableView({ playerNames, rows }) {
 
   const handleDelete = i => {
     const newRows = rows.filter((_, idx) => idx !== i)
-    setRows(newRows)
+    updateRows(newRows)
+    localStorage.setItem('gameRows', JSON.stringify(newRows))
+  }
+  const [modal, setModal] = useState({
+    open: false,
+    mode: 'edit',
+    rowIndex: null
+  })
+  const openEdit = i => setModal({ open: true, mode: 'edit', rowIndex: i })
+  const closeModal = () => setModal(m => ({ ...m, open: false }))
+  const handleConfirm = scores => {
+    let newRows
+    if (modal.mode === 'add') {
+      newRows = [...rows, scores]
+    } else {
+      newRows = [...rows]
+      newRows[modal.rowIndex] = scores
+    }
+    updateRows(newRows)
     localStorage.setItem('gameRows', JSON.stringify(newRows))
   }
 
@@ -472,6 +491,15 @@ export default function ScoreTableView({ playerNames, rows }) {
           )
         })}
       </Box>
+      {/* ── Shared add/edit modal ── */}
+      <CreateGameResultModal
+        isOpen={modal.open}
+        onClose={closeModal}
+        onConfirm={handleConfirm}
+        playerNames={playerNames}
+        initialValues={modal.mode === 'edit' ? rows[modal.rowIndex] : null}
+        roundIndex={modal.mode === 'edit' ? modal.rowIndex + 1 : null}
+      />
     </Box>
   )
 }

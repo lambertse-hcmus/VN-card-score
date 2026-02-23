@@ -67,7 +67,6 @@ const ScoreTable = ({ onFinishClick }) => {
 
   // ── handlers ──
   const openAdd = () => setModal({ open: true, mode: 'add', rowIndex: null })
-  const openEdit = i => setModal({ open: true, mode: 'edit', rowIndex: i })
   const closeModal = () => setModal(m => ({ ...m, open: false }))
   useEffect(() => {
     try {
@@ -115,7 +114,13 @@ const ScoreTable = ({ onFinishClick }) => {
       </Box>
 
       {/* Score table */}
-      <ScoreTableView rows={rows} playerNames={playerNames} />
+      <ScoreTableView
+        rows={rows}
+        playerNames={playerNames}
+        updateRows={rows => {
+          setRows(rows)
+        }}
+      />
 
       {/* ── Bottom buttons ── */}
       <Box display="flex" gap={3} pt={3} pb={1}>
@@ -174,7 +179,7 @@ const ScoreTable = ({ onFinishClick }) => {
       <ResetSessionModal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
-      />                     
+      />
       {/* ── Shared add/edit modal ── */}
       <CreateGameResultModal
         isOpen={modal.open}
