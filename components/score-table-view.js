@@ -349,6 +349,11 @@ export default function ScoreTableView() {
       const stored = localStorage.getItem('playerNames')
       if (stored) setPlayerNames(JSON.parse(stored))
     } catch {}
+
+    try {
+      const storedRows = localStorage.getItem('gameRows')
+      if (storedRows) setRows(JSON.parse(storedRows))
+    } catch {}
   }, [])
 
   // ── colors ──
@@ -377,19 +382,21 @@ export default function ScoreTableView() {
   const closeModal = () => setModal(m => ({ ...m, open: false }))
 
   const handleConfirm = scores => {
+    let newRows
     if (modal.mode === 'add') {
-      setRows(prev => [...prev, scores])
+      newRows = [...rows, scores]
     } else {
-      setRows(prev => {
-        const next = [...prev]
-        next[modal.rowIndex] = scores
-        return next
-      })
+      newRows = [...rows]
+      newRows[modal.rowIndex] = scores
     }
+    setRows(newRows)
+    localStorage.setItem('gameRows', JSON.stringify(newRows))
   }
 
   const handleDelete = i => {
-    setRows(prev => prev.filter((_, idx) => idx !== i))
+    const newRows = rows.filter((_, idx) => idx !== i)
+    setRows(newRows)
+    localStorage.setItem('gameRows', JSON.stringify(newRows))
   }
 
   const handleFinish = () => {
