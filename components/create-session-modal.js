@@ -19,6 +19,7 @@ function PlayerBox({
   index,
   value,
   isEditing,
+  hasError,
   onEdit,
   onDone,
   onChange,
@@ -29,10 +30,18 @@ function PlayerBox({
   const boxBg = useColorModeValue('white', '#25252c')
   const borderIdle = useColorModeValue('#e8e8e8', 'rgba(255,255,255,0.10)')
   const borderActive = useColorModeValue('#e53e3e', '#fc8181')
+  const borderError = useColorModeValue('#e53e3e', '#fc8181')
   const labelColor = useColorModeValue('red.500', 'red.300')
   const valueColor = useColorModeValue('gray.800', 'gray.100')
   const placeholderClr = useColorModeValue('#b0b0b0', '#555560')
   const inputColor = useColorModeValue('#1a1a1a', '#f0f0f0')
+  const errorBg = useColorModeValue('red.50', 'rgba(229,62,62,0.10)')
+
+  const borderColorResolved = isEditing
+    ? borderActive
+    : hasError
+      ? borderError
+      : borderIdle
 
   return (
     // motion.div handles entrance; inner Box handles interactive CSS
@@ -48,9 +57,9 @@ function PlayerBox({
     >
       <Box
         flex={1}
-        bg={boxBg}
+        bg={hasError && !isEditing ? errorBg : boxBg}
         border="2px solid"
-        borderColor={isEditing ? borderActive : borderIdle}
+        borderColor={borderColorResolved}
         borderRadius="14px"
         p={{ base: 3, md: 4 }}
         cursor="pointer"
@@ -63,10 +72,15 @@ function PlayerBox({
         boxShadow={
           isEditing
             ? '0 0 0 3px rgba(229,62,62,0.18), 0 2px 10px rgba(0,0,0,0.10)'
-            : '0 1px 4px rgba(0,0,0,0.07)'
+            : hasError
+              ? '0 0 0 2px rgba(229,62,62,0.15)'
+              : '0 1px 4px rgba(0,0,0,0.07)'
         }
-        transition="border-color 0.18s, box-shadow 0.18s"
+        transition="border-color 0.18s, box-shadow 0.18s, background 0.18s"
         _hover={{ borderColor: isEditing ? borderActive : 'red.300' }}
+        {...(hasError && {
+          animation: 'shake 0.35s ease-in-out'
+        })}
       >
         <Text
           fontSize="10px"
@@ -117,6 +131,8 @@ function PlayerBox({
 export default function CreateSessionModal({ isOpen, onClose }) {
   const [inputs, setInputs] = useState(['', '', '', ''])
   const [editingIndex, setEditingIndex] = useState(null)
+  const [errors, setErrors] = useState(new Set())
+  const [errorMessage, setErrorMessage] = useState('')
 
   const { t } = useLanguage()
 
@@ -140,6 +156,15 @@ export default function CreateSessionModal({ isOpen, onClose }) {
       n[index] = value
       return n
     })
+    // Clear error for this index as user types
+    if (errors.has(index)) {
+      setErrors(prev => {
+        const next = new Set(prev)
+        next.delete(index)
+        return next
+      })
+      if (errors.size <= 1) setErrorMessage('')
+    }
   }
 
   const handleDone = () => setEditingIndex(null)
@@ -167,12 +192,40 @@ export default function CreateSessionModal({ isOpen, onClose }) {
   }
 
   const handleStartGame = () => {
-    const playerNames = inputs.map(name => name.trim() || null)
-    console.log('Starting game with players:', playerNames)
-    if (!playerNames.every(name => name)) {
-      alert(t('enterPlayerNames'))
+    const playerNames = inputs.map(name => name.trim())
+    const newErrors = new Set()
+
+    // Check for blank names
+    playerNames.forEach((name, i) => {
+      if (!name) newErrors.add(i)
+    })
+
+    if (newErrors.size > 0) {
+      setErrors(newErrors)
+      setErrorMessage(t('enterPlayerNames'))
       return
     }
+
+    // Check for duplicate names (case-insensitive)
+    const lowerNames = playerNames.map(n => n.toLowerCase())
+    const seen = new Map()
+    lowerNames.forEach((name, i) => {
+      if (seen.has(name)) {
+        newErrors.add(i)
+        newErrors.add(seen.get(name))
+      } else {
+        seen.set(name, i)
+      }
+    })
+
+    if (newErrors.size > 0) {
+      setErrors(newErrors)
+      setErrorMessage(t('duplicatePlayerNames'))
+      return
+    }
+
+    setErrors(new Set())
+    setErrorMessage('')
     localStorage.setItem('playerNames', JSON.stringify(playerNames))
     window.location.href = '/'
   }
@@ -215,6 +268,17 @@ export default function CreateSessionModal({ isOpen, onClose }) {
               exit={{ opacity: 0, scale: 0.88, x: '-50%', y: '-48%' }}
               transition={{ duration: 0.26, ease: [0.32, 0.72, 0, 1] }}
             >
+              {/* Shake keyframes */}
+              <style>{`
+                @keyframes shake {
+                  0%, 100% { transform: translateX(0); }
+                  20% { transform: translateX(-4px); }
+                  40% { transform: translateX(4px); }
+                  60% { transform: translateX(-3px); }
+                  80% { transform: translateX(3px); }
+                }
+              `}</style>
+
               {/* Header */}
               <Box
                 display="flex"
@@ -257,7 +321,7 @@ export default function CreateSessionModal({ isOpen, onClose }) {
               <Grid
                 templateColumns="1fr 1fr"
                 gap={{ base: 3, md: 4 }}
-                mb={{ base: 5, md: 6 }}
+                mb={{ base: 2, md: 3 }}
               >
                 {[0, 1, 2, 3].map(i => (
                   <PlayerBox
@@ -265,6 +329,7 @@ export default function CreateSessionModal({ isOpen, onClose }) {
                     index={i}
                     value={inputs[i]}
                     isEditing={editingIndex === i}
+                    hasError={errors.has(i)}
                     onEdit={() => setEditingIndex(i)}
                     onDone={handleDone}
                     onChange={val => handleChange(i, val)}
@@ -272,6 +337,32 @@ export default function CreateSessionModal({ isOpen, onClose }) {
                   />
                 ))}
               </Grid>
+
+              {/* Error message */}
+              <AnimatePresence>
+                {errorMessage && (
+                  <MotionBox
+                    initial={{ opacity: 0, y: -6 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -6 }}
+                    transition={{ duration: 0.2 }}
+                    mb={{ base: 3, md: 3 }}
+                    mt={1}
+                  >
+                    <Text
+                      fontSize="sm"
+                      fontWeight="medium"
+                      color="red.500"
+                      textAlign="center"
+                    >
+                      {errorMessage}
+                    </Text>
+                  </MotionBox>
+                )}
+              </AnimatePresence>
+
+              {/* Spacer when no error */}
+              {!errorMessage && <Box mb={{ base: 3, md: 3 }} />}
 
               {/* Start game button */}
               <MotionBox
