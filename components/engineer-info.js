@@ -330,7 +330,7 @@ export default function EngineerInfo() {
       <Box borderRadius="full">
         <motion.div whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.92 }}>
           <IconButton
-            icon={<FaInfo size="20px" />}
+            icon={<FaInfo size="12px" />}
             aria-label="Buy me a coffee"
             size="md"
             bg={useColorModeValue('red.700', 'red.300')}

@@ -134,17 +134,6 @@ export default function CreateSessionModal({ isOpen, onClose }) {
   const [errors, setErrors] = useState(new Set())
   const [errorMessage, setErrorMessage] = useState('')
   // Enter key triggers confirm
-  useEffect(() => {
-    if (!isOpen) return
-    const handler = e => {
-      if (e.key === 'Enter') {
-        e.preventDefault()
-        handleDone()
-      }
-    }
-    window.addEventListener('keydown', handler)
-    return () => window.removeEventListener('keydown', handler)
-  })
 
   const { t } = useLanguage()
 
@@ -189,16 +178,17 @@ export default function CreateSessionModal({ isOpen, onClose }) {
         return n
       })
       setEditingIndex(null)
-    } else if (e.key === 'Tab') {
+    }
+    if (e.key === 'Tab') {
       e.preventDefault()
-      const nextIndex = e.shiftKey
+      const next = e.shiftKey
         ? index === 0
-          ? inputs.length - 1
+          ? 3
           : index - 1
-        : index === inputs.length - 1
+        : index === 3
           ? 0
           : index + 1
-      setEditingIndex(nextIndex)
+      setEditingIndex(next)
     }
   }
 
@@ -240,6 +230,18 @@ export default function CreateSessionModal({ isOpen, onClose }) {
     localStorage.setItem('playerNames', JSON.stringify(playerNames))
     window.location.href = '/'
   }
+  // Enter key triggers confirm
+  useEffect(() => {
+    if (!isOpen) return
+    const handler = e => {
+      if (e.key === 'Enter') {
+        e.preventDefault()
+        handleStartGame()
+      }
+    }
+    window.addEventListener('keydown', handler)
+    return () => window.removeEventListener('keydown', handler)
+  })
 
   return (
     <Portal>

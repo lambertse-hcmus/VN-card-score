@@ -5,6 +5,7 @@ import { useLanguage } from '../lib/i18n'
 import Layout from '../components/layouts/article'
 import Dashboard from '../components/dashboard'
 import ScoreTable from '../components/score-table'
+import RatingScreen from '../components/rating-screen'
 
 const MotionBox = motion(Box)
 
@@ -23,6 +24,7 @@ export default function StartPage() {
   const { t } = useLanguage()
   const shouldReduceMotion = useReducedMotion()
   const [players, setPlayers] = useState([])
+  const [totalScore, setTotalScore] = useState(null)
 
   // Collect players from localStorage
   React.useEffect(() => {
@@ -36,6 +38,11 @@ export default function StartPage() {
     'rgba(0,0,0,0.10)',
     'rgba(255,255,255,0.08)'
   )
+
+  const handleFinishClicked = finalScores => {
+    console.log('Final scores received in StartPage:', finalScores)
+    setTotalScore(finalScores)
+  }
 
   return (
     <Layout>
@@ -89,10 +96,12 @@ export default function StartPage() {
         px={4}
       >
         <Box w="full" height="80vh">
-          {players.length > 0 ? (
-            <ScoreTable />
+          {totalScore ? (
+            <RatingScreen scores={totalScore} />
+          ) : players.length > 0 ? (
+            <ScoreTable onFinishClick={handleFinishClicked} />
           ) : (
-            <Dashboard players={players} />
+            <Dashboard />
           )}
         </Box>
       </Box>

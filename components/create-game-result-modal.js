@@ -186,7 +186,6 @@ export default function CreateGameResultModal({
   const handleDone = () => setEditingIndex(null)
 
   const handleKeyDown = (e, index) => {
-    if (e.key === 'Enter') handleDone()
     if (e.key === 'Escape') {
       setInputs(prev => { const n = [...prev]; n[index] = ''; return n })
       setEditingIndex(null)

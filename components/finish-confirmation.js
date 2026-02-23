@@ -43,8 +43,6 @@ export default function FinishConfirmationModal({
     'rgba(252,129,129,0.30)'
   )
 
-  const handleConfirm = () => {}
-
   return (
     <Portal>
       <AnimatePresence>
@@ -205,7 +203,9 @@ export default function FinishConfirmationModal({
                       transition: { duration: 0.15 }
                     }}
                     whileTap={{ scale: 0.97, transition: { duration: 0.1 } }}
-                    onClick={handleConfirm}
+                    onClick={() => {
+                      onConfirm()
+                    }}
                   >
                     {t('finishConfirmationConfirm')}
                   </MotionBox>
