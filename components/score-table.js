@@ -180,14 +180,12 @@ const ScoreTable = ({ onFinishClick }) => {
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
       />
-      {/* ── Shared add/edit modal ── */}
+      {/* ── Shared add modal ── */}
       <CreateGameResultModal
         isOpen={modal.open}
         onClose={closeModal}
         onConfirm={handleConfirm}
         playerNames={playerNames}
-        initialValues={modal.mode === 'edit' ? rows[modal.rowIndex] : null}
-        roundIndex={modal.mode === 'edit' ? modal.rowIndex + 1 : null}
       />
       {/* ── Finish confirmation modal ── */}
       <FinishConfirmationModal

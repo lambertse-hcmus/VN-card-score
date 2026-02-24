@@ -169,7 +169,7 @@ function rankPlayers(totalScores) {
   let currentRank = 1
   for (let i = 0; i < entries.length; i++) {
     if (i > 0 && entries[i].score < entries[i - 1].score) {
-      currentRank = i + 1
+      currentRank += 1
     }
     ranked.push({ ...entries[i], rank: currentRank })
   }
@@ -479,7 +479,7 @@ export default function RatingScreen({ totalScores }) {
             maxW="600px"
           >
             {restPlaces.map((player, i) => {
-              const config = RANK_CONFIG[player.rank - firstPlace.length + 1] || RANK_CONFIG[4]
+              const config = RANK_CONFIG[player.rank] || RANK_CONFIG[4]
               const podiumH =
                 player.rank === 2
                   ? '110px'

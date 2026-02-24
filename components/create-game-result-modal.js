@@ -5,7 +5,7 @@ import {
   Text,
   IconButton,
   Portal,
-  useColorModeValue,
+  useColorModeValue
 } from '@chakra-ui/react'
 import { CloseIcon } from '@chakra-ui/icons'
 import { motion, AnimatePresence } from 'framer-motion'
@@ -15,18 +15,28 @@ const MotionBox = motion(Box)
 
 // ── Score input box (mirrors PlayerBox in create-session-modal) ───────────────
 
-function ScoreBox({ index, playerName, value, isEditing, hasError, onEdit, onDone, onChange, onKeyDown }) {
+function ScoreBox({
+  index,
+  playerName,
+  value,
+  isEditing,
+  hasError,
+  onEdit,
+  onDone,
+  onChange,
+  onKeyDown
+}) {
   const { t } = useLanguage()
 
-  const boxBg       = useColorModeValue('white', '#25252c')
-  const borderIdle  = useColorModeValue('#e8e8e8', 'rgba(255,255,255,0.10)')
+  const boxBg = useColorModeValue('white', '#25252c')
+  const borderIdle = useColorModeValue('#e8e8e8', 'rgba(255,255,255,0.10)')
   const borderActive = useColorModeValue('#e53e3e', '#fc8181')
-  const borderError  = useColorModeValue('#e53e3e', '#fc8181')
-  const labelColor  = useColorModeValue('red.500', 'red.300')
-  const valueColor  = useColorModeValue('gray.800', 'gray.100')
+  const borderError = useColorModeValue('#e53e3e', '#fc8181')
+  const labelColor = useColorModeValue('red.500', 'red.300')
+  const valueColor = useColorModeValue('gray.800', 'gray.100')
   const placeholderClr = useColorModeValue('#b0b0b0', '#555560')
-  const inputColor  = useColorModeValue('#1a1a1a', '#f0f0f0')
-  const errorBg     = useColorModeValue('red.50', 'rgba(229,62,62,0.10)')
+  const inputColor = useColorModeValue('#1a1a1a', '#f0f0f0')
+  const errorBg = useColorModeValue('red.50', 'rgba(229,62,62,0.10)')
 
   const borderColorResolved = isEditing
     ? borderActive
@@ -38,7 +48,11 @@ function ScoreBox({ index, playerName, value, isEditing, hasError, onEdit, onDon
     <motion.div
       initial={{ opacity: 0, y: 14 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.32, delay: 0.12 + index * 0.07, ease: 'easeOut' }}
+      transition={{
+        duration: 0.32,
+        delay: 0.12 + index * 0.07,
+        ease: 'easeOut'
+      }}
       style={{ display: 'flex', flex: 1 }}
     >
       <Box
@@ -99,7 +113,7 @@ function ScoreBox({ index, playerName, value, isEditing, hasError, onEdit, onDon
               fontSize: '22px',
               fontWeight: '700',
               background: 'transparent',
-              color: inputColor,
+              color: inputColor
             }}
           />
         ) : (
@@ -124,11 +138,11 @@ export default function CreateGameResultModal({
   onConfirm,
   playerNames = ['', '', '', ''],
   initialValues = null,
-  roundIndex = null,
+  roundIndex = null
 }) {
-  const [inputs, setInputs]             = useState(['', '', '', ''])
+  const [inputs, setInputs] = useState(['', '', '', ''])
   const [editingIndex, setEditingIndex] = useState(null)
-  const [errors, setErrors]             = useState(new Set())
+  const [errors, setErrors] = useState(new Set())
   const [errorMessage, setErrorMessage] = useState('')
 
   const { t } = useLanguage()
@@ -146,7 +160,7 @@ export default function CreateGameResultModal({
   // Enter key triggers confirm
   useEffect(() => {
     if (!isOpen) return
-    const handler = (e) => {
+    const handler = e => {
       if (e.key === 'Enter') {
         e.preventDefault()
         handleConfirm()
@@ -158,24 +172,31 @@ export default function CreateGameResultModal({
 
   const isEditMode = roundIndex !== null
 
-  const modalBg     = useColorModeValue('#ffffff', '#1b1b22')
+  const modalBg = useColorModeValue('#ffffff', '#1b1b22')
   const headerColor = useColorModeValue('gray.800', 'gray.50')
-  const subtitleClr = useColorModeValue('gray.500', 'gray.400')
-  const dividerClr  = useColorModeValue('gray.100', 'whiteAlpha.100')
-  const glowColor   = useColorModeValue('rgba(197,48,48,0.50)', 'rgba(252,129,129,0.38)')
+  const subtitleClr = useColorModeValue('green.600', 'green.300')
+  const dividerClr = useColorModeValue('gray.100', 'whiteAlpha.100')
+  const glowColor = useColorModeValue(
+    'rgba(197,48,48,0.50)',
+    'rgba(252,129,129,0.38)'
+  )
   const btnGradient = useColorModeValue(
     'linear-gradient(135deg, #e53e3e 0%, #9b2c2c 100%)',
     'linear-gradient(135deg, #fc8181 0%, #e53e3e 100%)'
   )
-  const btnTextColor  = useColorModeValue('white', '#1a202c')
-  const cancelBorder  = useColorModeValue('gray.300', 'whiteAlpha.300')
-  const cancelColor   = useColorModeValue('gray.600', 'gray.300')
+  const btnTextColor = useColorModeValue('white', '#1a202c')
+  const cancelBorder = useColorModeValue('gray.300', 'whiteAlpha.300')
+  const cancelColor = useColorModeValue('gray.600', 'gray.300')
   const cancelHoverBg = useColorModeValue('gray.100', 'whiteAlpha.100')
 
   const handleChange = (index, value) => {
     // Allow digits, minus sign, and empty string
     if (value === '' || value === '-' || /^-?\d+$/.test(value)) {
-      setInputs(prev => { const n = [...prev]; n[index] = value; return n })
+      setInputs(prev => {
+        const n = [...prev]
+        n[index] = value
+        return n
+      })
     }
     // Clear errors as user types
     if (errors.size > 0) {
@@ -188,14 +209,22 @@ export default function CreateGameResultModal({
 
   const handleKeyDown = (e, index) => {
     if (e.key === 'Escape') {
-      setInputs(prev => { const n = [...prev]; n[index] = ''; return n })
+      setInputs(prev => {
+        const n = [...prev]
+        n[index] = ''
+        return n
+      })
       setEditingIndex(null)
     }
     if (e.key === 'Tab') {
       e.preventDefault()
       const next = e.shiftKey
-        ? (index === 0 ? 3 : index - 1)
-        : (index === 3 ? 0 : index + 1)
+        ? index === 0
+          ? 3
+          : index - 1
+        : index === 3
+          ? 0
+          : index + 1
       setEditingIndex(next)
     }
   }
@@ -239,7 +268,10 @@ export default function CreateGameResultModal({
               inset={0}
               zIndex={1200}
               bg="blackAlpha.600"
-              css={{ backdropFilter: 'blur(7px)', WebkitBackdropFilter: 'blur(7px)' }}
+              css={{
+                backdropFilter: 'blur(7px)',
+                WebkitBackdropFilter: 'blur(7px)'
+              }}
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
@@ -259,8 +291,8 @@ export default function CreateGameResultModal({
               boxShadow="0 28px 70px rgba(0,0,0,0.30)"
               p={{ base: 5, md: 7 }}
               initial={{ opacity: 0, scale: 0.88, x: '-50%', y: '-48%' }}
-              animate={{ opacity: 1, scale: 1,    x: '-50%', y: '-50%' }}
-              exit={{    opacity: 0, scale: 0.88, x: '-50%', y: '-48%' }}
+              animate={{ opacity: 1, scale: 1, x: '-50%', y: '-50%' }}
+              exit={{ opacity: 0, scale: 0.88, x: '-50%', y: '-48%' }}
               transition={{ duration: 0.26, ease: [0.32, 0.72, 0, 1] }}
             >
               {/* Shake keyframes */}
@@ -291,8 +323,8 @@ export default function CreateGameResultModal({
                   >
                     {title}
                   </Text>
-                  <Text fontSize="sm" color={subtitleClr} mt={0.5}>
-                    {t('enterScores')}
+                  <Text fontSize="sm" color={subtitleClr} mt={2}>
+                    {t('addGameTips')}
                   </Text>
                 </Box>
 
@@ -404,7 +436,7 @@ export default function CreateGameResultModal({
                   whileHover={{
                     scale: 1.02,
                     boxShadow: `0 8px 36px ${glowColor}`,
-                    transition: { duration: 0.18 },
+                    transition: { duration: 0.18 }
                   }}
                   whileTap={{ scale: 0.97, transition: { duration: 0.1 } }}
                   onClick={handleConfirm}

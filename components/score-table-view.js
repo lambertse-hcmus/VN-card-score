@@ -364,13 +364,8 @@ export default function ScoreTableView({ playerNames, rows, updateRows }) {
   const openEdit = i => setModal({ open: true, mode: 'edit', rowIndex: i })
   const closeModal = () => setModal(m => ({ ...m, open: false }))
   const handleConfirm = scores => {
-    let newRows
-    if (modal.mode === 'add') {
-      newRows = [...rows, scores]
-    } else {
-      newRows = [...rows]
-      newRows[modal.rowIndex] = scores
-    }
+    let newRows = [...rows]
+    newRows[modal.rowIndex] = scores
     updateRows(newRows)
     localStorage.setItem('gameRows', JSON.stringify(newRows))
   }
@@ -491,14 +486,14 @@ export default function ScoreTableView({ playerNames, rows, updateRows }) {
           )
         })}
       </Box>
-      {/* ── Shared add/edit modal ── */}
+      {/* ── Shared add modal ── */}
       <CreateGameResultModal
         isOpen={modal.open}
         onClose={closeModal}
         onConfirm={handleConfirm}
         playerNames={playerNames}
-        initialValues={modal.mode === 'edit' ? rows[modal.rowIndex] : null}
-        roundIndex={modal.mode === 'edit' ? modal.rowIndex + 1 : null}
+        initialValues={rows[modal.rowIndex]}
+        roundIndex={modal.rowIndex + 1}
       />
     </Box>
   )
