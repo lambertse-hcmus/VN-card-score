@@ -85,6 +85,7 @@ export default function FinishConfirmationModal({
               <Box display="flex" justifyContent="flex-end" mb={1}>
                 <IconButton
                   icon={<CloseIcon boxSize="9px" />}
+                  style={{ WebkitTapHighlightColor: 'transparent' }}
                   aria-label="Close"
                   size="sm"
                   variant="ghost"
@@ -173,7 +174,10 @@ export default function FinishConfirmationModal({
                     borderRadius="full"
                     cursor="pointer"
                     letterSpacing="wide"
-                    style={{ transition: 'background 0.15s' }}
+                    style={{
+                      transition: 'background 0.15s',
+                      WebkitTapHighlightColor: 'transparent'
+                    }}
                     whileHover={{ scale: 1.03, transition: { duration: 0.15 } }}
                     whileTap={{ scale: 0.97, transition: { duration: 0.1 } }}
                     _hover={{ bg: cancelHoverBg }}
@@ -196,7 +200,10 @@ export default function FinishConfirmationModal({
                     borderRadius="full"
                     cursor="pointer"
                     letterSpacing="wide"
-                    style={{ boxShadow: `0 4px 18px ${confirmGlow}` }}
+                    style={{
+                      boxShadow: `0 4px 18px ${confirmGlow}`,
+                      WebkitTapHighlightColor: 'transparent'
+                    }}
                     whileHover={{
                       scale: 1.03,
                       boxShadow: `0 6px 28px ${confirmGlow}`,

@@ -93,6 +93,7 @@ const Dashboard = () => {
             letterSpacing="wide"
             minW={{ base: '220px', md: '300px' }}
             display="block"
+            style={{ WebkitTapHighlightColor: 'transparent' }}
             animate={
               shouldReduceMotion
                 ? {}

@@ -39,7 +39,6 @@ export default function StartPage() {
   )
 
   const handleFinishClicked = finalScores => {
-    console.log('Final scores received in StartPage:', finalScores)
     setTotalScores(finalScores)
   }
 

@@ -209,6 +209,7 @@ function DataRow({ index, scores, isEven, onEdit, onDelete }) {
                   backdropFilter: 'blur(6px)',
                   WebkitBackdropFilter: 'blur(6px)'
                 }}
+                style={{ WebkitTapHighlightColor: 'transparent' }}
                 px={4}
               >
                 <Text fontSize="xs" fontWeight="bold" color="red.500" mr={2}>

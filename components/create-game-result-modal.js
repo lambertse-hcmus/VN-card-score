@@ -53,7 +53,11 @@ function ScoreBox({
         delay: 0.12 + index * 0.07,
         ease: 'easeOut'
       }}
-      style={{ display: 'flex', flex: 1 }}
+      style={{
+        display: 'flex',
+        flex: 1,
+        WebkitTapHighlightColor: 'transparent'
+      }}
     >
       <Box
         flex={1}
@@ -330,6 +334,7 @@ export default function CreateGameResultModal({
 
                 <IconButton
                   icon={<CloseIcon boxSize="9px" />}
+                  style={{ WebkitTapHighlightColor: 'transparent' }}
                   aria-label="Close"
                   size="sm"
                   variant="ghost"
@@ -409,7 +414,7 @@ export default function CreateGameResultModal({
                   borderRadius="full"
                   cursor="pointer"
                   letterSpacing="wide"
-                  style={{ transition: 'background 0.15s' }}
+                  style={{ transition: 'background 0.15s', WebkitTapHighlightColor: 'transparent' }}
                   _hover={{ bg: cancelHoverBg }}
                   whileHover={{ scale: 1.02, transition: { duration: 0.15 } }}
                   whileTap={{ scale: 0.97, transition: { duration: 0.1 } }}
@@ -432,7 +437,7 @@ export default function CreateGameResultModal({
                   borderRadius="full"
                   cursor="pointer"
                   letterSpacing="wide"
-                  style={{ boxShadow: `0 4px 22px ${glowColor}` }}
+                  style={{ boxShadow: `0 4px 22px ${glowColor}`, WebkitTapHighlightColor: 'transparent' }}
                   whileHover={{
                     scale: 1.02,
                     boxShadow: `0 8px 36px ${glowColor}`,

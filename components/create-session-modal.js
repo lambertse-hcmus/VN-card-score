@@ -53,7 +53,11 @@ function PlayerBox({
         delay: 0.12 + index * 0.07,
         ease: 'easeOut'
       }}
-      style={{ display: 'flex', flex: 1 }}
+      style={{
+        display: 'flex',
+        flex: 1,
+        WebkitTapHighlightColor: 'transparent'
+      }}
     >
       <Box
         flex={1}
@@ -316,6 +320,7 @@ export default function CreateSessionModal({ isOpen, onClose }) {
 
                 <IconButton
                   icon={<CloseIcon boxSize="9px" />}
+                  style={{ WebkitTapHighlightColor: 'transparent' }}
                   aria-label="Close"
                   size="sm"
                   variant="ghost"
@@ -392,7 +397,10 @@ export default function CreateSessionModal({ isOpen, onClose }) {
                 border="none"
                 cursor="pointer"
                 letterSpacing="wide"
-                style={{ boxShadow: `0 4px 22px ${glowColor}` }}
+                style={{
+                  boxShadow: `0 4px 22px ${glowColor}`,
+                  WebkitTapHighlightColor: 'transparent'
+                }}
                 whileHover={{
                   scale: 1.03,
                   boxShadow: `0 8px 36px ${glowColor}`,

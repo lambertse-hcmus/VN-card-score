@@ -101,7 +101,10 @@ const ScoreTable = ({ onFinishClick }) => {
           borderRadius="full"
           cursor="pointer"
           letterSpacing="wide"
-          style={{ transition: 'background 0.18s, border-color 0.18s' }}
+          style={{
+            transition: 'background 0.18s, border-color 0.18s',
+            WebkitTapHighlightColor: 'transparent'
+          }}
           _hover={{ bg: btnHoverBg, borderColor: btnColor }}
           whileHover={{ scale: 1.04, transition: { duration: 0.15 } }}
           whileTap={{ scale: 0.96, transition: { duration: 0.1 } }}
@@ -139,7 +142,7 @@ const ScoreTable = ({ onFinishClick }) => {
           borderRadius="full"
           cursor="pointer"
           letterSpacing="wide"
-          style={{ transition: 'background 0.15s' }}
+          style={{ transition: 'background 0.15s', WebkitTapHighlightColor: 'transparent'  }}
           _hover={{ bg: addHoverBg }}
           whileHover={{ scale: 1.02, transition: { duration: 0.15 } }}
           whileTap={{ scale: 0.97, transition: { duration: 0.1 } }}
@@ -162,7 +165,7 @@ const ScoreTable = ({ onFinishClick }) => {
           borderRadius="full"
           cursor="pointer"
           letterSpacing="wide"
-          style={{ boxShadow: `0 4px 18px ${finishGlow}` }}
+          style={{ boxShadow: `0 4px 18px ${finishGlow}`, WebkitTapHighlightColor: 'transparent'  }}
           whileHover={{
             scale: 1.02,
             boxShadow: `0 6px 28px ${finishGlow}`,
