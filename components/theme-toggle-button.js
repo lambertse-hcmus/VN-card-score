@@ -29,6 +29,7 @@ const ThemeToggleButton = () => {
       outline="none"
       p="3px"
       aria-label={t('toggleTheme')}
+      style={{ WebkitTapHighlightColor: 'transparent' }}
     >
       {/* Sliding circle */}
       <motion.div

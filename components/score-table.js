@@ -91,6 +91,7 @@ const ScoreTable = ({ onFinishClick }) => {
           gap="6px"
           px={4}
           py={2}
+          my={2}
           fontSize="sm"
           fontWeight="semibold"
           fontFamily="'M PLUS Rounded 1c', sans-serif"

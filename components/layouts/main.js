@@ -7,7 +7,7 @@ const Main = ({ children, router }) => {
     <Box as="main" display="flex" flexDir="column" minH="100vh">
       <Head>
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <title>Card Game Scorer</title>
+        <title>Tính Điểm Tiến Lên</title>
       </Head>
 
       <Navbar path={router.asPath} />
